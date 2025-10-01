@@ -29,10 +29,10 @@ async def predict(request: PredictRequest) -> PredictResponse:
             entities = []
         else:
             # Предсказание сущностей
-            entities_data = await prediction_service.predict(request.input)
-            entities = [Entity(**entity) for entity in entities_data]
+            entities = await prediction_service.predict(request.input)
+            # entities = [Entity(**entity) for entity in entities_data]
         
-        response = PredictResponse(entities=entities)
+        response = PredictResponse(root=entities)
         success = True
         return response
         

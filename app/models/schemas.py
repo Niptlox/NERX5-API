@@ -2,7 +2,7 @@
 Pydantic схемы для API
 """
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 
 class PredictRequest(BaseModel):
     input: str = Field(..., description="Текст для извлечения сущностей", min_length=0)
@@ -28,25 +28,26 @@ class Entity(BaseModel):
             }
         }
 
-class PredictResponse(BaseModel):
-    entities: List[Entity] = Field(default_factory=list, description="Список найденных сущностей")
-    
+class Entity(BaseModel):
+    start_index: int = Field(..., description="Начальный индекс сущности")
+    end_index: int = Field(..., description="Конечный индекс сущности")
+    entity: str = Field(..., description="Тип сущности")
+
+class PredictResponse(RootModel[List[Entity]]):
     class Config:
         schema_extra = {
-            "example": {
-                "entities": [
-                    {
-                        "start_index": 0,
-                        "end_index": 8,
-                        "entity": "B-TYPE"
-                    },
-                    {
-                        "start_index": 9,
-                        "end_index": 15,
-                        "entity": "I-TYPE"
-                    }
-                ]
-            }
+            "example": [
+                {
+                    "start_index": 0,
+                    "end_index": 8,
+                    "entity": "B-TYPE"
+                },
+                {
+                    "start_index": 9,
+                    "end_index": 15,
+                    "entity": "I-TYPE"
+                }
+            ]
         }
 
 class HealthResponse(BaseModel):

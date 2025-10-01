@@ -86,14 +86,16 @@ class NERModelWrapper:
                     config=config,
                     trust_remote_code=False
                 )
+                
 
                 # Переносим на устройство и в режим оценки
+                print(f"{torch.cuda.is_available()=}")
                 self.device = settings.device if torch.cuda.is_available() and settings.device == "cuda" else "cpu"
                 self.model.to(self.device)
                 self.model.eval()
 
             
-                model_logger.info("Модель успешно загружена")
+                model_logger.info(f"Модель успешно загружена на {self.device}")
                 return True
                 
             except Exception as e:
@@ -226,17 +228,19 @@ class NERModelWrapper:
                 if widx is not None and widx != prev_widx:
                     tag = id_to_tag[str(preds[idx])] if isinstance(list(id_to_tag.keys())[0], str) else id_to_tag[preds[idx]]
                     token = words[widx]
-                    result.append(f"{token}[{tag}]")
+                    result.append((token, tag))
                     prev_widx = widx
                     result_tags.append(tag)
             
+
             # Очистка BIO тегов
             result_tags = self._clean_bio_tags(result_tags)
             
+            # model_logger.info(f"result {result} {result_tags}")
             # Конвертация в формат API
-            entities = self._convert_predictions_to_entities(text, result_tags)
+            # entities = self._convert_predictions_to_entities(text, result_tags)
             
-            return entities
+            return self.format_annotation(text, result_tags)
             
         except Exception as e:
             model_logger.error(f"Ошибка при предсказании: {str(e)}")
@@ -245,6 +249,23 @@ class NERModelWrapper:
     def is_loaded(self) -> bool:
         """Проверка загружена ли модель"""
         return self.model is not None and self.tokenizer is not None
+    
+    @staticmethod
+    def format_annotation(text, tagged_output):        
+        ann = []
+        idx = 0
+        for token, tag in zip(text.split(), tagged_output):
+            length = len(token)        
+            if tag:
+                current_entity = {
+                    'start_index': idx,
+                    'end_index': idx + length,
+                    'entity': tag
+                }
+                ann.append(current_entity)
+            idx += length + 1  # +1 на разделитель пробела
+
+        return ann
 
 # Глобальный экземпляр модели
 ner_model = NERModelWrapper()

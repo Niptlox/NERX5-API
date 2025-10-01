@@ -1,6 +1,7 @@
 """
 Главное приложение FastAPI
 uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
 """
 import asyncio
 from contextlib import asynccontextmanager
