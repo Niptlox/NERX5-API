@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
     model_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "model_weights")
-    base_model_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "cointegrated/rubert-tiny2")
-    # base_model_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "model_weights/bert")
+    # base_model_path: str = "cointegrated/rubert-tiny2"
+    base_model_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "model_weights/bert")
 
     # model_path: str = "app/best_ner_model"
 
