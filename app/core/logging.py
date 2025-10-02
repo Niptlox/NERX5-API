@@ -20,9 +20,14 @@ def setup_logger(
     
     if not logger.handlers:
         handler = logging.StreamHandler(sys.stdout)
-        handler.setFormatter(logging.Formatter(format_str))
+        handler.setFormatter(logging.Formatter(format_str))        
         logger.addHandler(handler)
+        file_handller=logging.FileHandler("app.log")
+        file_handller.setFormatter(logging.Formatter(format_str))        
+        file_handller.setLevel(logging.WARNING)
+        logger.addHandler(file_handller)
         logger.setLevel(getattr(logging, level.upper()))
+        # Save log
     
     return logger
 

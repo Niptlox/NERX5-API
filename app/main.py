@@ -1,7 +1,7 @@
 """
 Главное приложение FastAPI
-uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 """
 import asyncio
 from contextlib import asynccontextmanager
@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
 # Создание FastAPI приложения
 app = FastAPI(
     title="NER API Service",
-    description="Высокопроизводительный API для извлечения именованных сущностей",
+    description="API для извлечения именованных сущностей",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
