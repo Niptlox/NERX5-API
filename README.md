@@ -84,6 +84,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 Поместите обученную модель в директорию `model_weights/`:
 ```
 model_weights/
+├── bert/
 ├── config.json
 ├── pytorch_model.bin
 ├── tokenizer.json
