@@ -127,9 +127,8 @@ async def predict_batch(requests: List[PredictRequest]) -> List[PredictResponse]
         batch_results = await prediction_service.batch_predict(texts)
         
         responses = []
-        for entities_data in batch_results:
-            entities = [Entity(**entity) for entity in entities_data]
-            responses.append(PredictResponse(entities=entities))
+        for entities_data in batch_results:            
+            responses.append(PredictResponse(entities_data))
         
         success = True
         return responses
