@@ -2,6 +2,16 @@
 
 Высокопроизводительная распределенная система для извлечения именованных сущностей (Named Entity Recognition) на основе FastAPI с поддержкой минимум 20 запросов в секунду.
 
+## Быстрый запуск
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
+```
+
 ## Архитектура системы
 
 ### Компоненты
@@ -71,9 +81,9 @@
 ## Установка и запуск
 
 ### Подготовка модели
-Поместите обученную модель в директорию `best_ner_model/`:
+Поместите обученную модель в директорию `model_weights/`:
 ```
-best_ner_model/
+model_weights/
 ├── config.json
 ├── pytorch_model.bin
 ├── tokenizer.json
@@ -161,7 +171,7 @@ curl http://localhost:8000/metrics
 ```bash
 DEBUG=False                 # Режим отладки
 LOG_LEVEL=INFO             # Уровень логирования
-MODEL_PATH=/app/best_ner_model  # Путь к модели
+MODEL_PATH=/app/model_weights  # Путь к модели
 MAX_WORKERS=4              # Количество worker'ов
 BATCH_SIZE=32              # Размер батча
 MAX_SEQUENCE_LENGTH=128    # Максимальная длина последовательности
@@ -169,7 +179,7 @@ DEVICE=cuda                # Устройство (cuda/cpu)
 ```
 
 ### Настройка модели
-Файл `best_ner_model/config.json`:
+Файл `model_weights/config.json`:
 ```json
 {
     "tag_to_id": {
@@ -213,7 +223,8 @@ ner-fastapi/
 │   ├── monitoring/
 │   │   ├── dashboard.py     # Streamlit дашборд
 │   │   └── middleware.py    # Middleware для метрик
-│   └── best_ner_model/      # Обученная модель
+│   └── model_weights/       # Обученная модель
+│       └── bert/            # Базовая bert модель
 └── tests/
     ├── test_api.py          # Тесты API
     └── test_performance.py  # Тесты производительности
@@ -322,6 +333,6 @@ MIT License
 При возникновении проблем:
 
 1. Проверьте логи: `docker-compose logs -f ner-api`
-2. Убедитесь в наличии модели в `best_ner_model/`
+2. Убедитесь в наличии модели в `app\model_weights`
 3. Проверьте доступность портов 8000 и 8501
 4. Запустите health check: `curl http://localhost:8000/health`
