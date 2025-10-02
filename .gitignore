@@ -2,3 +2,4 @@ model_weights
 model_weights.zip
 __pycache__
 .env
+app.log
